@@ -14,8 +14,17 @@ async function fetchData(url: string) {
   }
 }
 
-const stories = ref([]);
-const error = ref(null);
+interface Story {
+  id: number;
+  title: string;
+  url?: string;
+  score: number;
+  by: string;
+  descendants: number;
+}
+
+const stories = ref<Story[]>([]);
+const error = ref<null | unknown>(null);
 
 onMounted(async () => {
   try {
@@ -24,7 +33,7 @@ onMounted(async () => {
     );
     const storyPromises = ids
       .slice(0, 10)
-      .map((id) =>
+      .map((id: any) =>
         fetchData(`https://hacker-news.firebaseio.com/v0/item/${id}.json`)
       );
     stories.value = await Promise.all(storyPromises);
